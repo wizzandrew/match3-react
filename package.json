@@ -19,8 +19,10 @@
   },
   "homepage": "https://github.com/wizzandrew/match3-react#readme",
   "dependencies": {
+    "css-loader": "^6.7.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "style-loader": "^3.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.2",
