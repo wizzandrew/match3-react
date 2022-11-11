@@ -1,9 +1,12 @@
 import React from "react";
-type AppProps = { num: number };
+import Header from './components/HeaderComponent';
 
-function App({num}: AppProps) {
+function App() {
     return (
-        <h1>Total Number: {num}</h1>
+        <div>
+            <Header />
+            <h1>Total Number: 1234</h1>
+        </div>
     );
 }
 
