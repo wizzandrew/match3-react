@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Nav, NavItem, NavLink, Navbar, NavbarToggler, Collapse, Button } from 'reactstrap'
+import { Nav, NavItem, Navbar, NavbarToggler, Collapse, Button } from 'reactstrap';
+import { NavLink } from 'react-router-dom'
 
 export default function HeaderComponent() {
 
@@ -13,15 +14,15 @@ export default function HeaderComponent() {
             <Collapse isOpen={isOpen} navbar>
                 <Nav className='me-auto' navbar>
                     <NavItem>
-                        <NavLink href='/play'>Play</NavLink>
+                        <NavLink className="nav-link" to="/play">Play</NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink href='/scores'>Scores</NavLink>
+                        <NavLink className="nav-link" to="/scores">Scores</NavLink>
                     </NavItem>
                 </Nav>
                 <Nav className='ms-auto' navbar>
                     <NavItem>
-                        <NavLink href='/myprofile'>My Profile</NavLink>
+                        <NavLink className="nav-link" to="/myprofile">My Profile</NavLink>
                     </NavItem>
                     <NavItem>
                         <Button outline>Log in</Button>
