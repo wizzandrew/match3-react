@@ -2,27 +2,28 @@ import React, { useState, useEffect } from 'react'
 import { Table, Button } from 'reactstrap';
 import * as Board from '../model/board';
 import { useAppDispatch, useAppSelector} from '../redux/hooks';
-import { createBoard } from '../redux/boardSlice';
+import { createBoard, setCurrentMove } from '../redux/boardSlice';
 
 type TableRow = {
-    row: string[]
+    row: string[];
+    index: number
 }
 
 export default function BoardComponent() {
   const dispatch = useAppDispatch();
   const board = useAppSelector((state) => state.board.board);  
-  //const [generator, setGenerator] = useState<Board.Generator<string>>(Board.CyclicGenerator('ABCD'))  
-  //const [board, setBoard] = useState<Board.Board<string>>(Board.create(generator, 4, 4));
+  const currentMove = useAppSelector((state) => state.board.currentMove);
   const [newGame, setNewGame] = useState(false);
 
   
-  function ConstructTableRow( tableRow : TableRow) : any  {
+  function ConstructTableRow( {row, index}: TableRow) : any  {
+    const res: JSX.Element[] = new Array<JSX.Element>(row.length);
 
-    const res: JSX.Element[] = new Array<JSX.Element>(tableRow.row.length);
-
-    tableRow.row.map(cell => {
-        res.push(<td>{cell}</td>);
-    })
+    row.map((cell, cellIndex) => {
+        const id = index + cellIndex.toString(10);
+        res.push(
+        <td key={id} onClick={() => dispatch(setCurrentMove(id))}>{cell}</td>);
+    });
 
     return res;
   }
@@ -77,10 +78,10 @@ export default function BoardComponent() {
             {newGame && board && board.tiles && (
                 <Table bordered>
                     <tbody>
-                        {board.tiles.map(tableRow => 
-                            <tr key={tableRow.toString()}>
-                                <ConstructTableRow row={...tableRow} />
-                            </tr>)}
+                        {board.tiles.map((tableRow, index) => (
+                            <tr key={index}>
+                                <ConstructTableRow row={...tableRow} index={index}/>
+                            </tr>))}
                     </tbody>
                 </Table>
             )}
