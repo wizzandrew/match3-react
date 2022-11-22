@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Button } from 'reactstrap';
 import * as Board from '../model/board';
+import { useAppDispatch, useAppSelector} from '../redux/hooks';
+import { createBoard } from '../redux/boardSlice';
 
 type TableRow = {
     row: string[]
 }
 
 export default function BoardComponent() {
-  const [generator, setGenerator] = useState<Board.Generator<string>>(Board.CyclicGenerator('ABCD'))  
-  const [board, setBoard] = useState<Board.Board<string>>(Board.create(generator, 4, 4));
+  const dispatch = useAppDispatch();
+  const board = useAppSelector((state) => state.board.board);  
+  //const [generator, setGenerator] = useState<Board.Generator<string>>(Board.CyclicGenerator('ABCD'))  
+  //const [board, setBoard] = useState<Board.Board<string>>(Board.create(generator, 4, 4));
   const [newGame, setNewGame] = useState(false);
 
   
@@ -70,7 +74,7 @@ export default function BoardComponent() {
             </Table>
             )}
 
-            {newGame && board.tiles && (
+            {newGame && board && board.tiles && (
                 <Table bordered>
                     <tbody>
                         {board.tiles.map(tableRow => 
@@ -83,7 +87,7 @@ export default function BoardComponent() {
         </div>
         <div className="row">
             <div className="col-2 offset-5">
-                <Button onClick={() => setNewGame(true)}>New Game</Button>
+                <Button onClick={() => {setNewGame(true); dispatch(createBoard());}}>New Game</Button>
             </div>
         </div>
     </div>
