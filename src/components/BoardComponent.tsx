@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Table, Button } from 'reactstrap';
 import * as Board from '../model/board';
 import { useAppDispatch, useAppSelector} from '../redux/hooks';
-import { createBoard, setCurrentMove } from '../redux/boardSlice';
+import { createBoard, setCurrentMove, finishGame } from '../redux/boardSlice';
 
 type TableRow = {
     row: string[];
@@ -12,7 +12,9 @@ type TableRow = {
 export default function BoardComponent() {
   const dispatch = useAppDispatch();
   const board = useAppSelector((state) => state.board.board);  
-  const currentMove = useAppSelector((state) => state.board.currentMove);
+  const score = useAppSelector((state) => state.board.score);
+  const moveCountdown = useAppSelector((state) => state.board.moveCountdown);
+  const moveNotification = useAppSelector((state) => state.board.moveNotification);
   const [newGame, setNewGame] = useState(false);
 
   
@@ -32,16 +34,21 @@ export default function BoardComponent() {
     <div className='p-3 mt-5 bg-light bg-gradient'>
         <div className="row">
             <div className="col-5 d-flex">
-                <p>Score: 0&emsp;</p>
-                <p>Moves left: 10&emsp;</p>
+                <p>Score: {score}&emsp;</p>
+                <p>Moves left: {moveCountdown}&emsp;</p>
             </div>
             <div className="col-3">
-                <Button>Finish Game</Button>
+                <Button onClick={() => dispatch(finishGame())}>Finish Game</Button>
             </div>
             <div className="col-3 d-flex justify-content-end">
                 <Button color="danger">X</Button>
             </div>
             <hr />
+        </div>
+        <div className="row">
+            <div className="col-4 offset-4 text-align-center">
+                <p>{moveNotification}</p>
+            </div>
         </div>
         <div className="row">
             {newGame == false && (
