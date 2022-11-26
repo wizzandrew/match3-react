@@ -1,16 +1,30 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { LoginProps, LoginReply, loginUser, logoutUser } from "../shared/api";
+import {
+  LoginProps,
+  LoginReply,
+  loginUser,
+  logoutUser,
+  getGames,
+  getUserAccount,
+  GetAccountProps,
+  Account,
+} from "../shared/api";
 import { URL } from "../shared/utils";
+import { Game } from "./boardSlice";
 import { RootState, AppDispatch } from "./store";
 
 export type InitialState = {
   token: string | null;
   userId: number | null;
+  completedGames: Game[] | null;
+  account: Account | null;
 };
 
 const initialState: InitialState = {
   token: null,
   userId: null,
+  completedGames: null,
+  account: null,
 };
 
 const userSlice = createSlice({
@@ -42,6 +56,30 @@ const userSlice = createSlice({
     });
     builder.addCase(userLogout.rejected, (state) => {
       alert("Failed to logout");
+      state.token = null;
+      state.userId = null;
+    });
+    builder.addCase(
+      userGames.fulfilled,
+      (state, action: PayloadAction<Game[] | null>) => {
+        const games = action.payload;
+        state.completedGames = games;
+      }
+    );
+    builder.addCase(userGames.rejected, (state, action) => {
+      console.log("Failed to fetch games\n" + action.error.message);
+      state.completedGames = null;
+    });
+    builder.addCase(
+      userAccount.fulfilled,
+      (state, action: PayloadAction<Account | null>) => {
+        const account = action.payload;
+        state.account = account;
+      }
+    );
+    builder.addCase(userAccount.rejected, (state, action) => {
+      console.log("Failed to fetch account\n" + action.error.message);
+      state.account = null;
     });
   },
 });
@@ -60,6 +98,22 @@ export const userLogout = createAsyncThunk(
   "user/logout",
   async (token: string) => {
     const response = await logoutUser(token);
+    return response;
+  }
+);
+
+export const userGames = createAsyncThunk(
+  "user/games",
+  async (token: string) => {
+    const response = await getGames(token);
+    return response;
+  }
+);
+
+export const userAccount = createAsyncThunk(
+  "user/account",
+  async (props: GetAccountProps) => {
+    const response = await getUserAccount(props);
     return response;
   }
 );

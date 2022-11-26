@@ -78,24 +78,27 @@ export default function BoardComponent() {
   }
 
   const handleNewGame = () => {
-    setNewGame(true);
-    dispatch(gamePost(loggedUser.token));
-    if (loggedUser.token != null)
+    if (loggedUser.token != null) {
+      setNewGame(true);
+      dispatch(gamePost(loggedUser.token));
       setTimeout(() => dispatch(createBoard()), 1000);
+    }
   };
 
   const handleFinishGame = () => {
-    dispatch(finishGame());
-    if (game != null) {
-      dispatch(
-        gamePatch({
-          token: loggedUser.token,
-          user: loggedUser.userId,
-          id: game.id,
-          score: score,
-          completed: true,
-        })
-      );
+    if (loggedUser.token != null) {
+      dispatch(finishGame());
+      if (game != null) {
+        dispatch(
+          gamePatch({
+            token: loggedUser.token,
+            user: loggedUser.userId,
+            id: game.id,
+            score: score,
+            completed: true,
+          })
+        );
+      }
     }
   };
 

@@ -14,6 +14,18 @@ export type LoginReply = {
   error?: string;
 };
 
+export type Account = {
+  username: string;
+  password: string;
+  id: number;
+  admin: boolean;
+};
+
+export type GetAccountProps = {
+  id: number;
+  token: string;
+};
+
 export async function loginUser(login: LoginProps): Promise<LoginReply> {
   let result: LoginReply;
 
@@ -117,4 +129,40 @@ export async function patchGame(
     throw new Error("\nStatus: " + response.status + " " + response.statusText);
   }
   return result;
+}
+
+export async function getGames(token: string): Promise<Game[]> {
+  let result;
+
+  const response = await fetch(URL + "games?token=" + token);
+
+  if (response.ok) {
+    await response
+      .json()
+      .then((data) => (result = data))
+      .catch((err) => console.log(err));
+  } else {
+    throw new Error("\nStatus: " + response.status + " " + response.statusText);
+  }
+
+  return result as Game[];
+}
+
+export async function getUserAccount(props: GetAccountProps): Promise<Account> {
+  let result;
+
+  const response = await fetch(
+    URL + "users/" + props.id + "?token=" + props.token
+  );
+
+  if (response.ok) {
+    await response
+      .json()
+      .then((data) => (result = data))
+      .catch((err) => console.log(err));
+  } else {
+    throw new Error("\nStatus: " + response.status + " " + response.statusText);
+  }
+
+  return result as Account;
 }
