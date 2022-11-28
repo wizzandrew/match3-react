@@ -173,6 +173,7 @@ function gameOver(state: RootState) {
 }
 
 export const gamePost = createAsyncThunk("game/post", async (token: string) => {
+  console.log("boardSlice gamePost method call");
   const response = await postGame(token);
   return response;
 });

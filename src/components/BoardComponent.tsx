@@ -78,6 +78,7 @@ export default function BoardComponent() {
   }
 
   const handleNewGame = () => {
+    console.log("board component handleNewGame");
     if (loggedUser.token != null) {
       setNewGame(true);
       dispatch(gamePost(loggedUser.token));
@@ -100,6 +101,7 @@ export default function BoardComponent() {
         );
       }
     }
+    setNewGame(false);
   };
 
   function ConstructTableRow({ row, index }: TableRow): any {
