@@ -88,7 +88,6 @@ export default function BoardComponent() {
 
   const handleFinishGame = () => {
     if (loggedUser.token != null) {
-      dispatch(finishGame());
       if (game != null) {
         dispatch(
           gamePatch({
@@ -100,6 +99,7 @@ export default function BoardComponent() {
           })
         );
       }
+      dispatch(finishGame());
     }
     setNewGame(false);
   };
